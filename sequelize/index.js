@@ -2,6 +2,8 @@
 const {Sequelize} = require('sequelize');
 const bcrypt = require('bcrypt'); // para encriptar las contraseñas
 const logger = require('../logger'); // para mostrar mensajes por consola
+const database = require('../database'); // para mostrar mensajes por consola
+const sequelize = require('../sequelize'); // para mostrar mensajes por consola
 
 // creamos la instancia de sequelize
 const sequelize =  new Sequelize({
@@ -36,10 +38,13 @@ async function reset(){
         // creamos usuarios de prueba
         for (let index = 0; i < USERS.length; indixe++){
             // creamos el usuario
-            user[index].password = await bcrypt.hash(user[index].password, 10); // encriptamos la contraseña
+                USERS[index].password = await bcrypt.hash(user[index].password, 10); // encriptamos la contraseña
             // guardamos el usuario en la bd
         }
         await sequelize.models.user.bulkCreate(USERSusers); // creamos los usuarios
+        logger.info('Creados usuarios iniciales');
+    }  else {
+        logger.info('La base de datos ya estaba inicializada');
     }
 }
 
